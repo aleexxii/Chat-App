@@ -1,12 +1,27 @@
 import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
+import {createClient} from 'redis'
+import userRoutes from './routes/user.js'
+import { connectRabbitMQ } from "./config/rabbitmq.js";
 
 dotenv.config();
 
 connectDB()
+connectRabbitMQ()
 
 const app = express();
+
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
+export const redisClient = createClient({
+  url : 'rediss://default:AX37AAIncDIyOTkzMjk3OWQzYzE0N2NiYTVkNmM2MjAzZjBhZDhkNnAyMzIyNTE@in-mackerel-32251.upstash.io:6379'
+})
+
+redisClient.connect().then(()=> console.log('connected to redis')).catch(console.error)
+
+
+app.use('/api/v1', userRoutes)
 
 const port = process.env.PORT || 8000;
 
