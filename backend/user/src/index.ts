@@ -15,7 +15,7 @@ const app = express();
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 export const redisClient = createClient({
-  url : 'rediss://default:AX37AAIncDIyOTkzMjk3OWQzYzE0N2NiYTVkNmM2MjAzZjBhZDhkNnAyMzIyNTE@in-mackerel-32251.upstash.io:6379'
+  url : process.env.REDIS_URL as string
 })
 
 redisClient.connect().then(()=> console.log('connected to redis')).catch(console.error)
