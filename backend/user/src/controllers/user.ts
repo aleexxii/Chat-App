@@ -1,4 +1,4 @@
-import { Types } from "mongoose";
+import type { Response } from "express";
 import { generateToken } from "../config/generateToken.js";
 import { publishToQueue } from "../config/rabbitmq.js";
 import TryCatch from "../config/TryCatch.js";
@@ -83,8 +83,49 @@ export const verifyUser = TryCatch(async (req, res) => {
   });
 });
 
-export const myProfile = async(req : AuthenticatedRequest, res)=>{
-  const user = req.user
+export const myProfile = async(req : AuthenticatedRequest, res:Response)=>{
+  if (!req.user) {
+    return res.status(401).json({ message: 'User not authenticated' });
+  }
+
+  res.json({
+    success : true,
+    user : req.user
+  })
+}
+
+export const updateName = TryCatch(async(req: AuthenticatedRequest, res) => {
+  
+  if (!req.user?._id) {
+    return res.status(401).json({ message: 'User not authenticated' });
+  }
+
+  const user = await User.findById(req.user?._id)
+
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  user.name = req.body.name;
+
+  await user?.save()
+  const token = generateToken(user)
+
+res.json({
+  message : 'User Updated',
+  user,
+  token
+})
+})
+
+export const getAllUsers = TryCatch(async(req:AuthenticatedRequest, res)=>{
+  const users = await User.find()
+
+  res.json(users)
+})
+
+export const getAUser = TryCatch(async(req, res)=> {
+  const user = await User.findById(req.params.id)
 
   res.json(user)
-}
+})
