@@ -8,10 +8,12 @@ import type { AuthenticatedRequest } from "../middleware/isAuth.js";
 
 export const loginUser = TryCatch(async (req, res) => {
   const { email } = req.body;
+  console.log('reached login controller', email);
 
   const rateLimitKey = `otp:ratelimit:${email}`;
 
   const rateLimit = await redisClient.get(rateLimitKey);
+  console.log('ckeck rate Limit : ', rateLimit);
   if (rateLimit) {
     res.status(429).json({
       message: "Too many Request. Please wait before requesting new otp",
@@ -35,6 +37,8 @@ export const loginUser = TryCatch(async (req, res) => {
     body: `Your OTP is ${otp}. It is valid for 5 minutes`,
   };
 
+  console.log('message : ', message);
+console.log('📧 Queueing email TO:', email, typeof email, !!email);
   await publishToQueue("send-otp", message);
 
   res.status(200).json({
@@ -44,7 +48,7 @@ export const loginUser = TryCatch(async (req, res) => {
 
 export const verifyUser = TryCatch(async (req, res) => {
   const { email, otp: enteredOtp } = req.body;
-  console.log("Body : ", req.body);
+  console.log("Body from verifyUser controller : ", req.body);
   if (!email || !enteredOtp) {
     res.status(400).json({
       message: "Email and OTP required",
@@ -54,12 +58,10 @@ export const verifyUser = TryCatch(async (req, res) => {
 
   const otpKey = `otp:${email}`;
 
-  console.log("Otp Key : ", otpKey);
-
   const storedOtp = await redisClient.get(otpKey);
+  console.log("storedOtp : ", storedOtp, " enteredOtp : ", enteredOtp);
 
   if (!storedOtp || storedOtp !== enteredOtp) {
-    console.log("storedOtp : ", storedOtp, " enteredOtp : ", enteredOtp);
     return res.status(400).json({
       message: "Invalid or Expired Otp",
     });
