@@ -16,7 +16,7 @@ function LoginPage() {
     try {
       const { data } = await axios.post(
         `http://localhost:5000/api/v1/login`,
-        email,
+        {email}
       );
       alert(data.message);
       router.push(`/verify?email=${email}`);
