@@ -4,6 +4,7 @@ import axios from "axios";
 import { ArrowRight, Loader2, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { user_service } from "../context/AppContext";
 
 function LoginPage() {
   const [email, setEmail] = useState<string>("");
@@ -15,7 +16,7 @@ function LoginPage() {
     setLoading(true);
     try {
       const { data } = await axios.post(
-        `http://localhost:5000/api/v1/login`,
+        `${user_service}/api/v1/login`,
         {email}
       );
       alert(data.message);
