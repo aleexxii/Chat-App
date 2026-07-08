@@ -10,7 +10,7 @@ export interface IMessage extends Document{
     }
     messageType : 'text' | 'image';
     seen : boolean;
-    seenAt? : Date
+    seenAt? : Date;
     createdAt : Date;
     updatedAt : Date;
 }

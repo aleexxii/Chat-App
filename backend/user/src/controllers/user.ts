@@ -11,6 +11,8 @@ export const loginUser = TryCatch(async (req, res) => {
   console.log('reached login controller', email);
 
   const rateLimitKey = `otp:ratelimit:${email}`;
+console.log("rate Limit : ", rateLimitKey);
+console.log(redisClient.get(rateLimitKey));
 
   const rateLimit = await redisClient.get(rateLimitKey);
   console.log('ckeck rate Limit : ', rateLimit);
