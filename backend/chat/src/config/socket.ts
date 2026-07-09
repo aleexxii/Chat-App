@@ -1,6 +1,8 @@
 import { Server, Socket } from "socket.io";
 import http from "http";
 import express from "express";
+import { Chat } from "../models/Chat.js";
+import { Messages } from "../models/Messages.js";
 
 const app = express();
 
@@ -31,6 +33,58 @@ io.on("connection", (socket: Socket) => {
 
   if (userId) {
     socket.join(userId);
+
+    void (async () => {
+      const chats = await Chat.find({ users: { $in: [userId] } }).select("_id");
+      const chatIds = chats.map((chat) => chat._id);
+
+      if (chatIds.length === 0) return;
+
+      const undeliveredMessages = await Messages.find({
+        chatId: { $in: chatIds },
+        sender: { $ne: userId },
+        delivered: false,
+      }).select("_id chatId sender");
+
+      if (undeliveredMessages.length === 0) return;
+
+      const deliveredAt = new Date();
+      const messageIds = undeliveredMessages.map((message) => message._id);
+
+      await Messages.updateMany(
+        { _id: { $in: messageIds } },
+        { delivered: true, deliveredAt },
+      );
+
+      const messagesBySenderAndChat = undeliveredMessages.reduce<
+        Record<string, { sender: string; chatId: string; messageIds: unknown[] }>
+      >((acc, message) => {
+        const chatId = message.chatId.toString();
+        const key = `${message.sender}:${chatId}`;
+
+        if (!acc[key]) {
+          acc[key] = {
+            sender: message.sender,
+            chatId,
+            messageIds: [],
+          };
+        }
+
+        acc[key].messageIds.push(message._id);
+        return acc;
+      }, {});
+
+      Object.values(messagesBySenderAndChat).forEach((data) => {
+        io.to(data.sender).emit("messagesDelivered", {
+          chatId: data.chatId,
+          deliveredTo: userId,
+          messageIds: data.messageIds,
+          deliveredAt,
+        });
+      });
+    })().catch((error) => {
+      console.log("Failed to mark messages delivered", error);
+    });
   }
   socket.on("typing", (data) => {
     console.log(`user ${data.userId} is typing in chat ${data.chatId}`);
@@ -54,8 +108,8 @@ io.on("connection", (socket: Socket) => {
   });
 
   socket.on("leaveChat", (chatId) => {
-    socket.join(chatId);
-    console.log(`user ${userId} joined chat room ${chatId}`);
+    socket.leave(chatId);
+    console.log(`user ${userId} left chat room ${chatId}`);
   });
   // It should be placed here remove from top if any case it not working
   // io.emit('getOnline', Object.keys(userId))

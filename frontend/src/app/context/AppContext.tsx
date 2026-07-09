@@ -67,7 +67,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   // const initialToken = Cookies.get("token");
   const [user, setUser] = useState<User | null>(null);
   const [isAuth, setIsAuth] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [chats, setChats] = useState<Chats[] | null>(null);
   const [users, setUsers] = useState<User[] | null>(null);
 
@@ -96,6 +96,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       setLoading(false);
     } catch (error) {
       console.log(error);
+      setIsAuth(false);
+      setUser(null);
       setLoading(false);
     }
   };

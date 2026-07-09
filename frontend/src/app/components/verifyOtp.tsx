@@ -119,23 +119,23 @@ const VerifyOtp = () => {
   if (isAuth) redirect("/chat");
 
   return (
-    <div className='min-h-screen bg-gray-900 flex items-center justify-center p-4'>
+    <div className='min-h-screen bg-[#ECE5DD] flex items-center justify-center p-4'>
       <div className='max-w-md w-full'>
-        <div className='bg-gray-800 border border-gray-700 rounded-lg p-8'>
+        <div className='bg-white border border-[#D1D7DB] rounded-lg p-8 shadow-lg'>
           <div className='text-center mb-8 relative'>
             <button
-              className='absolute top-0 left-0 p-2 text-gray-300 hover:text-white'
+              className='absolute top-0 left-0 p-2 text-[#667781] hover:text-[#111B21]'
               onClick={() => router.push("/login")}
             >
               <ChevronLeft className='w-6 h-6' />
             </button>
-            <div className='mx-auto w-20 h-20 bg-blue-600 rounded-lg flex items-center justify-center mb-6'>
+            <div className='mx-auto w-20 h-20 bg-[#075E54] rounded-lg flex items-center justify-center mb-6'>
               <Lock size={40} className='text-white' />
             </div>
-            <h1 className='text-4xl font-bold text-white mb-3'>
+            <h1 className='text-4xl font-bold text-[#111B21] mb-3'>
               Verify Your Email
             </h1>
-            <p className='text-gray-300 text-lg'>
+            <p className='text-[#667781] text-lg'>
               we have sent a 6-digit code to &nbsp;
               {email}
             </p>
@@ -144,7 +144,7 @@ const VerifyOtp = () => {
             <div>
               <label
                 htmlFor='email'
-                className='block text-sm font-medium text-gray-300 mb-4 text-center'
+                className='block text-sm font-medium text-[#667781] mb-4 text-center'
               >
                 Enter Your 6 digit otp here
               </label>
@@ -161,19 +161,19 @@ const VerifyOtp = () => {
                     onChange={(e) => handleInputChange(idx, e.target.value)}
                     onKeyDown={(e) => handleKeyDown(idx, e)}
                     onPaste={idx === 0 ? handlePaste : undefined}
-                    className='w-12 h-12 text-center text-xl font-bold border-2 border-gray-600 rounded-lg bg-gray-700 text-white'
+                    className='w-12 h-12 text-center text-xl font-bold border-2 border-[#D1D7DB] rounded-lg bg-[#F0F2F5] text-[#111B21] focus:outline-none focus:border-[#128C7E]'
                   />
                 ))}
               </div>
             </div>
             {error && (
-              <div className='bg-red-900 border border-red-700 rounded-lg p-3'>
-                <p className='text-red-300 text-sm text-center'>{error}</p>
+              <div className='bg-[#FDECEC] border border-[#E57373] rounded-lg p-3'>
+                <p className='text-[#D9534F] text-sm text-center'>{error}</p>
               </div>
             )}
             <button
               type='submit'
-              className='w-full bg-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed'
+              className='w-full bg-[#25D366] text-white py-4 px-6 rounded-lg font-semibold hover:bg-[#20BD5A] disabled:opacity-50 disabled:cursor-not-allowed'
               disabled={loading}
             >
               {loading ? (
@@ -191,14 +191,14 @@ const VerifyOtp = () => {
           </form>
 
           <div className='mt-6 text-center'>
-            <p className='text-gray-400 text-sm mb-4'>
+            <p className='text-[#667781] text-sm mb-4'>
               Didn&apos;t recive the code
             </p>
             {timer > 0 ? (
-              <p className='text-gray-400 text-sm'> Resend code in {timer}s </p>
+              <p className='text-[#667781] text-sm'> Resend code in {timer}s </p>
             ) : (
               <button
-                className='text-blue-400 hover:text-blue-300 font-medium text-sm disabled:opacity-50'
+                className='text-[#128C7E] hover:text-[#075E54] font-medium text-sm disabled:opacity-50'
                 disabled={resendLoading}
                 onClick={handleResendOtp}
               >

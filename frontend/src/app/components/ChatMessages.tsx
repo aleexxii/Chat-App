@@ -1,11 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Message } from "@/app/chat/page";
 import { User } from "@/app/context/AppContext";
-// import Image from "next/image";
 import { useEffect, useMemo, useRef } from "react";
 import moment from "moment";
 import { Check, CheckCheck } from "lucide-react";
-import Image from "next/image";
 
 interface ChatMessagesProps {
   selectedUser: string | null;
@@ -32,21 +30,21 @@ const ChatMessages = ({
       seen.add(message._id);
       return true;
     });
-  });
+  }, [messages]);
 
   useEffect(() => {
     bottemRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [selectedUser, uniqueMessages]);
   return (
-    <div className='flex-1 overflow-hidden'>
-      <div className='h-full max-h-[calc(100vh - 215px)] overflow-y-auto p-2 space-y-2 custom-scroll'>
+    <div className='h-full overflow-hidden bg-[#ECE5DD]'>
+      <div className='h-full overflow-y-auto p-4 space-y-2 custom-scroll'>
         {!selectedUser ? (
-          <p className='text-gray-400 text-center mt-20'>
+          <p className='text-[#667781] text-center mt-20'>
             Please select a user to start chat
           </p>
         ) : (
           <>
-            {uniqueMessages.map((e, i) => {
+            {uniqueMessages.map((e) => {
               const isSentByeMe = e.sender === loggedInUser?._id;
               const uniqueKey = `${e._id}`;
 
@@ -57,7 +55,7 @@ const ChatMessages = ({
                     key={uniqueKey}
                   >
                     <div
-                      className={`rounded-lg p-3 max-w-sm ${isSentByeMe ? "bg-blue-600 text-white" : "bg-gray-700 text-white"}`}
+                      className={`rounded-lg p-3 max-w-sm shadow-sm ${isSentByeMe ? "bg-[#DCF8C6] text-[#111B21]" : "bg-white text-[#111B21]"}`}
                     >
                       {e.messageType === "image" && e.image && (
                         <div className='relative group'>
@@ -72,7 +70,7 @@ const ChatMessages = ({
                       {e.text && <p className='mt-1'>{e.text}</p>}
                     </div>
                     <div
-                      className={`flex items-center gap-1 text-xs text-gray-400 ${isSentByeMe ? "pr-2 flex-row-reverse" : "pl-2"}`}
+                      className={`flex items-center gap-1 text-xs text-[#667781] ${isSentByeMe ? "pr-2 flex-row-reverse" : "pl-2"}`}
                     >
                       <span>
                         {moment(e.createdAt).format("hh:mm A . MMM D")}
@@ -81,7 +79,7 @@ const ChatMessages = ({
                       {isSentByeMe && (
                         <div className='flex items-center ml-1'>
                           {e.seen ? (
-                            <div className='flex items-center gap-1 text-blue-400 '>
+                            <div className='flex items-center gap-1 text-[#34B7F1] '>
                               <CheckCheck className='w-3 h-3' />
                               {e.seenAt && (
                                 <span>
@@ -89,8 +87,10 @@ const ChatMessages = ({
                                 </span>
                               )}
                             </div>
+                          ) : e.delivered ? (
+                            <CheckCheck className='w-3 h-3 text-[#667781]' />
                           ) : (
-                            <Check className='w-3 h-3 text-gray-500' />
+                            <Check className='w-3 h-3 text-[#667781]' />
                           )}
                         </div>
                       )}

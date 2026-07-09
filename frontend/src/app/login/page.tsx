@@ -36,17 +36,17 @@ function LoginPage() {
   if(isAuth) redirect('/chat')
 
   return (
-    <div className='min-h-screen bg-gray-900 flex items-center justify-center p-4'>
+    <div className='min-h-screen bg-[#ECE5DD] flex items-center justify-center p-4'>
       <div className='max-w-md w-full'>
-        <div className='bg-gray-800 border border-gray-700 rounded-lg p-8'>
+        <div className='bg-white border border-[#D1D7DB] rounded-lg p-8 shadow-lg'>
           <div className='text-center mb-8'>
-            <div className='mx-auto w-20 h-20 bg-blue-600 rounded-lg flex items-center justify-center mb-6'>
+            <div className='mx-auto w-20 h-20 bg-[#075E54] rounded-lg flex items-center justify-center mb-6'>
               <Mail size={40} className='text-white' />
             </div>
-            <h1 className='text-4xl font-bold text-white mb-3'>
+            <h1 className='text-4xl font-bold text-[#111B21] mb-3'>
               Welcome To Chat App
             </h1>
-            <p className='text-gray-300 text-lg'>
+            <p className='text-[#667781] text-lg'>
               Enter your email to continue your journey
             </p>
           </div>
@@ -54,7 +54,7 @@ function LoginPage() {
             <div>
               <label
                 htmlFor='email'
-                className='block text-sm font-medium text-gray-300 mb-2'
+                className='block text-sm font-medium text-[#667781] mb-2'
               >
                 Email Address
               </label>
@@ -63,14 +63,14 @@ function LoginPage() {
                 id='email'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className='w-full px-4 py-4 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400'
+                className='w-full px-4 py-4 bg-[#F0F2F5] border border-[#D1D7DB] rounded-lg text-[#111B21] placeholder-[#667781] focus:outline-none focus:border-[#128C7E]'
                 placeholder='Enter your email address'
                 required
               />
             </div>
             <button
               type='submit'
-              className='w-full bg-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed'
+              className='w-full bg-[#25D366] text-white py-4 px-6 rounded-lg font-semibold hover:bg-[#20BD5A] disabled:opacity-50 disabled:cursor-not-allowed'
               disabled={loading}
             >
               {loading ? (

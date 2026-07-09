@@ -197,6 +197,7 @@ export const sendMessage = TryCatch(
 
     // Socket setup
     const receiverSocketId = getRecieverSocketId(otherUserId.toString())
+    const isReceiverOnline = Boolean(receiverSocketId);
     let isRecieverInChatRoom = false
 
     if(receiverSocketId){
@@ -210,6 +211,8 @@ export const sendMessage = TryCatch(
     const messageData: any = {
       chatId: chatId,
       sender: senderId,
+      delivered: isReceiverOnline,
+      deliveredAt: isReceiverOnline ? new Date() : undefined,
       seen: isRecieverInChatRoom,
       seenAt: isRecieverInChatRoom ? new Date() : undefined,
     };
@@ -273,7 +276,7 @@ export const sendMessage = TryCatch(
 
 export const getMessagesByChat = TryCatch(
   async (req: AuthenticatedRequest, res: Response) => {
-    const userId = req.user?._id;
+    const currentUserId  = req.user?._id;
     const { chatId } = req.params;
 
     if (!chatId) {
@@ -281,7 +284,7 @@ export const getMessagesByChat = TryCatch(
         message: "Unauthorized",
       });
     }
-    if (!userId) {
+    if (!currentUserId ) {
       return res.status(400).json({
         message: "userId required",
       });
@@ -295,7 +298,7 @@ export const getMessagesByChat = TryCatch(
       });
     }
     const isUserInChat = chat.users.some(
-      (userId) => userId.toString() === userId.toString(),
+      (userId) => userId.toString() === currentUserId .toString(),
     );
 
     if (!isUserInChat) {
@@ -305,14 +308,14 @@ export const getMessagesByChat = TryCatch(
     }
     const messagesToMarkSeen = await Messages.find({
       chatId: chatId,
-      sender: { $ne: userId },
+      sender: { $ne: currentUserId  },
       seen: false,
     });
 
     await Messages.updateMany(
       {
         chatId: chatId,
-        sender: { $ne: userId },
+        sender: { $ne: currentUserId  },
         seen: false,
       },
       {
@@ -322,7 +325,7 @@ export const getMessagesByChat = TryCatch(
     );
     const messages = await Messages.find({ chatId }).sort({ createdAt: 1 });
 
-    const otherUserId = chat.users.find((id) => id !== userId);
+    const otherUserId = chat.users.find((id) => id !== currentUserId );
 
     try {
       const { data } = await axios.get(
@@ -340,7 +343,7 @@ export const getMessagesByChat = TryCatch(
         if(otherUserSocketId){
           io.to(otherUserSocketId).emit('messagesSeen',{
             chatId : chatId,
-            seenBy : userId,
+            seenBy : currentUserId ,
             messageIds : messagesToMarkSeen.map((msg) => msg._id)
           })
         }

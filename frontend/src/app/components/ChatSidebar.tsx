@@ -51,24 +51,24 @@ const ChatSidebar = ({
 
   return (
     <aside
-      className={`fixed z-20 sm:static top-0 left-0 h-screen w-80 bg-gray-900 border-r border-gray-700 transform ${
+      className={`fixed z-20 sm:static top-0 left-0 h-screen w-80 bg-white border-r border-[#D1D7DB] transform ${
         sidebarOpen ? "translate-x-0 " : "-translate-x-full"
       } sm:translate-x-0 transition-transform duration-300 flex flex-col`}
     >
       {/* Header */}
-      <div className='p-6 border-b border-gray-700 '>
+      <div className='p-6 border-b border-[#D1D7DB] bg-[#075E54]'>
         <div className='sm:hidden flex justify-end mb-0'>
           <button
             onClick={() => setSidebarOpen(false)}
-            className='p-2 hover:bg-gray-700 rounded-lg transition-colors'
+            className='p-2 hover:bg-white/10 rounded-lg transition-colors'
           >
-            <X className='w-5 h-5 text-gray-300' />
+            <X className='w-5 h-5 text-white' />
           </button>
         </div>
 
         <div className='flex items-center justify-between'>
           <div className='flex items-center gap-3'>
-            <div className='p-2 bg-blue-600 justify-between'>
+            <div className='p-2 bg-[#25D366] rounded-lg justify-between'>
               <MessageCircle className='w-5 h-5 text-white' />
             </div>
             <h2 className='text-xl font-bold text-white'>
@@ -79,8 +79,8 @@ const ChatSidebar = ({
           <button
             className={`p-2.5 rounded-lg transition-colors ${
               showAllUsers
-                ? "bg-red-600 hover:bg-red-700 text-white"
-                : "bg-green-600 hover:bg-green-700 text-white"
+                ? "bg-[#E57373] hover:bg-[#D9534F] text-white"
+                : "bg-[#25D366] hover:bg-[#20BD5A] text-white"
             }`}
             onClick={() => setShowAllUsers((prev) => !prev)}
           >
@@ -98,11 +98,11 @@ const ChatSidebar = ({
         {showAllUsers ? (
           <div className='space-y-4 h-full'>
             <div className='relative'>
-              <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400' />
+              <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#667781]' />
               <input
                 type='text'
                 placeholder='Search Users...'
-                className='w-full pl-10 pr-4 py-3 bg-gray-800 border border-gray-700 text-white placeholder-gray-400'
+                className='w-full pl-10 pr-4 py-3 bg-[#F0F2F5] border border-[#D1D7DB] text-[#111B21] placeholder-[#667781] rounded-lg focus:outline-none focus:border-[#128C7E]'
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -119,21 +119,21 @@ const ChatSidebar = ({
                 .map((u) => (
                   <button
                     key={u._id}
-                    className='w-full text-left p-4 rounded-lg border bg-fuchsia-700 hover:border-gray-600 hover:bg-gray-800 transition-colors'
+                    className='w-full text-left p-4 rounded-lg border border-[#D1D7DB] bg-white hover:bg-[#F0F2F5] transition-colors'
                     onClick={() => createChat(u)}
                   >
                     <div className='flex items-center gap-3'>
                       <div className='relative'>
-                        <UserCircle className='w-6 h-6 text-gray-300' />
+                        <UserCircle className='w-6 h-6 text-[#667781]' />
                         {/* Online Symbol */}
                         {onlineUsers.includes(u._id) && (
-                          <span className='absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-green-50 border-2 border-gray-900' />
+                          <span className='absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-[#25D366] border-2 border-white' />
                         )}
                       </div>
 
                       <div className='flex-1 min-w-0'>
-                        <span className='font-medium text-white'>{u.name}</span>
-                        <div className='text-xs text-gray-400 mt-0.5 '>
+                        <span className='font-medium text-[#111B21]'>{u.name}</span>
+                        <div className='text-xs text-[#667781] mt-0.5 '>
                           {/* to show online and offline text  */}
                           {onlineUsers.includes(u._id)?"Online" : "Offline"}
                         </div>
@@ -158,19 +158,19 @@ const ChatSidebar = ({
                   onClick={() => handleChatClick(chat.chat._id)}
                   className={`w-full text-left p-4 rounded-lg transition-colors border ${
                     isSelected
-                      ? "bg-blue-600 border-blue-500"
-                      : "border-gray-700 hover:border-gray-600"
+                      ? "bg-[#E7FCE3] border-[#25D366]"
+                      : "border-transparent hover:bg-[#F0F2F5]"
                   }`}
                 >
                   <div className='flex items-center gap-3 '>
                     <div className='relative'>
-                      <div className='w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center'>
-                        <UserCircle className='w-7 h-7 text-gray-300' />
+                      <div className='w-12 h-12 rounded-full bg-[#D1D7DB] flex items-center justify-center'>
+                        <UserCircle className='w-7 h-7 text-[#667781]' />
                         {/* Online user */}
 
                       </div>
                       {onlineUsers.includes(chat.user._id)&& (
-                        <span className='absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-green-500 border-2 border-gray-900' />
+                        <span className='absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-[#25D366] border-2 border-white' />
                       )}
                     </div>
 
@@ -178,13 +178,13 @@ const ChatSidebar = ({
                       <div className='flex items-center justify-between mb-1'>
                         <span
                           className={`font-semibold truncate ${
-                            isSelected ? "text-white" : "text-gray-200"
+                            isSelected ? "text-[#111B21]" : "text-[#111B21]"
                           }`}
                         >
                           {chat.user.name}
                         </span>
                         {unseenCount > 0 && (
-                          <div className='bg-red-600 text-white text-xs font-bold rounded-full min-w-[22px] h-5.5 flex items-center justify-center px-2'>
+                          <div className='bg-[#25D366] text-white text-xs font-bold rounded-full min-w-[22px] h-5.5 flex items-center justify-center px-2'>
                             {unseenCount > 99 ? "99+" : unseenCount}
                           </div>
                         )}
@@ -194,15 +194,15 @@ const ChatSidebar = ({
                           {isSentByMe ? (
                             <CornerUpLeft
                               size={14}
-                              className='text-blue-400 shrink-0'
+                              className='text-[#34B7F1] shrink-0'
                             />
                           ) : (
                             <CornerDownRight
                               size={14}
-                              className='text-green-400 shrink-0'
+                              className='text-[#128C7E] shrink-0'
                             />
                           )}
-                          <span className='text-sm text-gray-400 truncate flex-1'>
+                          <span className='text-sm text-[#667781] truncate flex-1'>
                             {latestMessage.text}
                           </span>
                         </div>
@@ -215,11 +215,11 @@ const ChatSidebar = ({
           </div>
         ) : (
           <div className='flex flex-col items-center justify-center h-full text-center'>
-            <div className='p-4 bg-gray-800 rounded-full mb-4'>
-              <MessageCircle className='w-8 h-8 text-gray-400' />
+            <div className='p-4 bg-[#F0F2F5] rounded-full mb-4'>
+              <MessageCircle className='w-8 h-8 text-[#128C7E]' />
             </div>
-            <p className='text-gray-400 font-medium'>No conversation yet</p>
-            <p className='text-sm text-gray-500 mt-1'>
+            <p className='text-[#111B21] font-medium'>No conversation yet</p>
+            <p className='text-sm text-[#667781] mt-1'>
               Start a new chat to begin messaging
             </p>
           </div>
@@ -227,23 +227,23 @@ const ChatSidebar = ({
       </div>
 
       {/* footer */}
-      <div className='p-4 border-t border-gray-700 space-y-2 '>
+      <div className='p-4 border-t border-[#D1D7DB] space-y-2 bg-white'>
         <Link
           href={"/profile"}
-          className='flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors'
+          className='flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-[#F0F2F5] transition-colors'
         >
-          <div className='p-1.5 bg-gray-700 rounded-lg'>
-            <UserCircle className='w-4 h-4 text-gray-300' />
+          <div className='p-1.5 bg-[#D1D7DB] rounded-lg'>
+            <UserCircle className='w-4 h-4 text-[#667781]' />
           </div>
-          <span className='font-medium text-gray-300'>Profile</span>
+          <span className='font-medium text-[#111B21]'>Profile</span>
         </Link>
 
         <button
           onClick={handleLogout}
-          className='w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-600 transition-colors text-red-500 hover:text-white'
+          className='w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-[#FDECEC] transition-colors text-[#D9534F]'
         >
-          <div className='p-1.5 bg-red-600 rounded-lg'>
-            <LogOut className='w-4 h-4 text-gray-300' />
+          <div className='p-1.5 bg-[#E57373] rounded-lg'>
+            <LogOut className='w-4 h-4 text-white' />
           </div>
           <span className='font-medium'>Logout</span>
         </button>
