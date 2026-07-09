@@ -144,7 +144,7 @@ export const getAllChats = TryCatch(
 
 export const sendMessage = TryCatch(
   async (req: AuthenticatedRequest, res: Response) => {
-    console.log('Reached');
+
     if (!req.user?._id)
       return res.status(401).json({ message: "Unauthorized" });
     const senderId = req.user?._id;

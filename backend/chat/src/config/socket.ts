@@ -17,9 +17,9 @@ const io = new Server(server, {
 
 const userSocketMap: Record<string, string> = {};
 
-export const getRecieverSocketId = (recieverId:string) : string | undefined =>{
-    return userSocketMap[recieverId]
-}
+export const getRecieverSocketId = (recieverId: string): string | undefined => {
+  return userSocketMap[recieverId];
+};
 
 io.on("connection", (socket: Socket) => {
   console.log("User Connected", socket.id);
@@ -57,7 +57,10 @@ io.on("connection", (socket: Socket) => {
       );
 
       const messagesBySenderAndChat = undeliveredMessages.reduce<
-        Record<string, { sender: string; chatId: string; messageIds: unknown[] }>
+        Record<
+          string,
+          { sender: string; chatId: string; messageIds: unknown[] }
+        >
       >((acc, message) => {
         const chatId = message.chatId.toString();
         const key = `${message.sender}:${chatId}`;
