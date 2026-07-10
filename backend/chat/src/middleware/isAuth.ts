@@ -30,19 +30,21 @@ export const isAuth = async (
 
     if (!authHeader || !authHeader.startsWith("Bearer")) {
       res.status(401).json({
+        status: "error",
         message: "Please Login - No auth header",
       });
       return;
     }
     const [, token] = authHeader.split(" ");
     if (!token) {
-      res.status(401).json({ message: "Invalid Bearer token" });
+      res.status(401).json({ status: "error", message: "Invalid Bearer token" });
       return;
     }
     const decodedValue = jwt.verify(token, JWT_SECRET) as JwtPayload;
 
     if (!decodedValue || !decodedValue.user) {
       res.status(401).json({
+        status: "error",
         message: "Invalid token",
       });
       return;
@@ -52,6 +54,7 @@ export const isAuth = async (
     next();
   } catch (error) {
     res.status(401).json({
+      status: "error",
       message: "Please Login - JWT error",
     });
   }
