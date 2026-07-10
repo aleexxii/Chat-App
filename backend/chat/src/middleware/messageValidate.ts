@@ -12,21 +12,21 @@ export const validateMessage = (
 
   if (!chatId?.trim()) {
     return res.status(400).json({
-      status: "error",
+      status: false,
       message: "Chat ID is required",
     });
   }
 
   if (!hasText && !hasImage) {
     return res.status(400).json({
-      status: "error",
+      status: false,
       message: "Either text or image is required",
     });
   }
 
   if (hasText && text.length > 2000) {
     return res.status(400).json({
-      status: "error",
+      status: false,
       message: "Message cannot exceed 2000 characters",
     });
   }

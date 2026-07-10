@@ -13,7 +13,7 @@ export const createNewChat = TryCatch(
 
     if (!otherUserId) {
       return res.status(400).json({
-        status: "error",
+        status: false,
         message: "Other userId is required",
       });
     }
@@ -25,7 +25,7 @@ export const createNewChat = TryCatch(
 
     if (existingChat) {
       return res.status(200).json({
-        status: "success",
+        status: true,
         message: "Chat already exist",
         chatId: existingChat._id,
       });
@@ -36,7 +36,7 @@ export const createNewChat = TryCatch(
     });
 
     res.status(201).json({
-      status: "success",
+      status: true,
       message: "New chat created",
       chatId: newChat._id,
     });
@@ -49,7 +49,7 @@ export const getAllChats = TryCatch(
 
     if (!userId) {
       res.status(400).json({
-        status: "error",
+        status: false,
         message: "UserId missing",
       });
       return;
@@ -141,7 +141,7 @@ export const getAllChats = TryCatch(
     //   }),
     // );
     res.status(200).json({
-      status: "success",
+      status: true,
       chats: chatWithUserData,
     });
   },
@@ -151,7 +151,7 @@ export const sendMessage = TryCatch(
   async (req: AuthenticatedRequest, res: Response) => {
 
     if (!req.user?._id)
-      return res.status(401).json({ status: "error", message: "Unauthorized" });
+      return res.status(401).json({ status: false, message: "Unauthorized" });
     const senderId = req.user?._id;
     const { chatId, text } = req.body;
     const imageFile = req.file;
@@ -159,19 +159,19 @@ export const sendMessage = TryCatch(
 
     if (!senderId) {
       return res.status(401).json({
-        status: "error",
+        status: false,
         message: "Unauthorized",
       });
     }
     if (!chatId) {
       return res.status(422).json({
-        status: "error",
+        status: false,
         message: "ChatId required",
       });
     }
     if (!text && !imageFile) {
       return res.status(422).json({
-        status: "error",
+        status: false,
         message: "Either text or image is required",
       });
     }
@@ -179,7 +179,7 @@ export const sendMessage = TryCatch(
     const chat = await Chat.findById(chatId);
     if (!chat) {
       return res.status(404).json({
-        status: "error",
+        status: false,
         message: "Chat not found",
       });
     }
@@ -190,7 +190,7 @@ export const sendMessage = TryCatch(
 
     if (!isUserInChat) {
       return res.status(403).json({
-        status: "error",
+        status: false,
         message: "You are not a participant of this chat",
       });
     }
@@ -201,7 +201,7 @@ export const sendMessage = TryCatch(
 
     if (!otherUserId) {
       return res.status(401).json({
-        status: "error",
+        status: false,
         message: "No other user",
       });
     }
@@ -279,7 +279,7 @@ export const sendMessage = TryCatch(
     }
 
     res.status(201).json({
-      status: "success",
+      status: true,
       message: savedMessage,
       sender: senderId,
     });
@@ -293,13 +293,13 @@ export const getMessagesByChat = TryCatch(
 
     if (!chatId) {
       return res.status(401).json({
-        status: "error",
+        status: false,
         message: "Unauthorized",
       });
     }
     if (!currentUserId ) {
       return res.status(400).json({
-        status: "error",
+        status: false,
         message: "userId required",
       });
     }
@@ -308,7 +308,7 @@ export const getMessagesByChat = TryCatch(
 
     if (!chat) {
       return res.status(404).json({
-        status: "error",
+        status: false,
         message: "chat not found",
       });
     }
@@ -318,7 +318,7 @@ export const getMessagesByChat = TryCatch(
 
     if (!isUserInChat) {
       return res.status(403).json({
-        status: "error",
+        status: false,
         message: "You are not a participant of this chat",
       });
     }
@@ -349,7 +349,7 @@ export const getMessagesByChat = TryCatch(
       );
       if (!otherUserId) {
         return res.status(400).json({
-          status: "error",
+          status: false,
           message: "No other user",
         });
       }
@@ -367,14 +367,14 @@ export const getMessagesByChat = TryCatch(
       }
 
       res.status(200).json({
-        status: "success",
+        status: true,
         messages,
         user: data,
       });
     } catch (error) {
       console.log(error);
       res.status(200).json({
-        status: "success",
+        status: true,
         messages,
         user: { _id: otherUserId, name: "Unknown user" },
       });
