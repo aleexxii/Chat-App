@@ -11,11 +11,11 @@ export const messageRateLimiter = (
   const userId = (req as AuthenticatedRequest).user?._id;
 
   if (!userId) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.status(401).json({ status: "error", message: "Unauthorized" });
   }
 
   if (!messageLimit.canSend(userId.toString())) {
-    return res.status(429).json({ message: "Too many requests" });
+    return res.status(429).json({ status: "error", message: "Too many requests" });
   }
 
   next();
